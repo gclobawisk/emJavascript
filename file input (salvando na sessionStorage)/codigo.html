@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+<!-- CSS para esconder o INPUT FILE-->
+
+          <style>
+
+          input[type='file'] {
+              display: none;
+          }
+
+          </style>
+          
+
+<!-- Enviar para o final da coluna-->
+  <div class="text-end">
+    <input type="file" id="myFileInput" class="btn btn-primary text-end my-1">
+      <button onclick="event.preventDefault()" class="btn btn-primary" id="iconInput">
+        <i class="fa-solid fa-plus">Anexar</i>
+      </button>
+  </div>         
+  
+  
+  <div id="resultado">
+
+  </div>
+
+  <p>
+  
+  <div>
+    <button onclick="getAllStorage()">MOSTRAR TODOS</button>
+
+    <div id="TODOSosRESULTADOS">
+      <div id="ExibirTodos">
+
+      </div>
+  </div>
+  
+
+
+
+<!-- Script JAVASCRIPT -->
+
+  <script> 
+
+
+    //Alterar o Input e Abri-lo
+
+    let iconInput = document.getElementById('iconInput');
+    let file = document.getElementById('myFileInput');
+
+    iconInput.addEventListener('click', () => {
+        file.click();
+    });
+
+
+    //Obter o nome do Arquivo e mostrar no HTML
+    count = 0
+    document.querySelector("#myFileInput").addEventListener("change", function(e){
+
+        var fileName = e.target.files[0].name;
+        
+         
+
+         var divNova3 = document.createElement('div');
+         divNova3.className="bg-light mt-1";
+         divNova3.id="div"+count
+
+         divNova3.innerHTML = fileName;
+         document.getElementById("resultado").append(divNova3);
+
+         count++
+
+        // Chama a função apenas quando o arquivo for CARREGADO (onload)
+         chamandoFUNCAO = saveStorage(fileName)
+         
+
+        });  
+
+    
+    function saveStorage(fileName){
+
+          const reader = new FileReader();
+
+          //Carregar o arquivo na Session Storage
+          sessionStorage.setItem(fileName, reader.result);  
+          reader.readAsDataURL(this.files[0]); 
+    }
+
+      
+     function getAllStorage(){
+        iiii = 0 
+        if (sessionStorage.length >= 1){
+          for (j=0; j < sessionStorage.length; j++){
+              
+              if (sessionStorage.key(j) != "dados"){
+              
+                  document.getElementById("ExibirTodos").innerHTML = '<h6 class=""> Arquivos Anexados </h6>'; 
+                  var divNova3 = document.createElement('div');
+                  divNova3.className="";
+                  divNova3.id="div"+count
+                  conteudo2 = '<h5><i class="fa fa-trash text-danger align-middle border border-danger m-2" onclick="deletarAnexo('+iiii+')"></i> '+
+                              '<a href="'+sessionStorage.getItem(sessionStorage.key(j))+'" download> <i class="fa-solid fa-eye border border-success text-success"></i></a> '+sessionStorage.key(j)+' <h5>'
+                  divNova3.innerHTML = conteudo2
+                  document.getElementById("TODOSosRESULTADOS").append(divNova3);  
+                  iiii++
+              }
+          }
+      }
+      else{
+          document.getElementById("TODOSosRESULTADOS").innerHTML = "Nenhum Arquivo Adicionado"; 
+      }
+
+    }
+
+  </script>
